@@ -1,4 +1,4 @@
-package com.example.config;
+package com.hahaha.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.DirectExchange;

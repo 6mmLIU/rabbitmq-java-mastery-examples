@@ -1,4 +1,4 @@
-package com.example;
+package com.hahaha;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class WaitForConfirmSend {
+public class WaitForConfirmOrDieSend {
     public static void main(String[] args) {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("192.168.171.130");
@@ -65,10 +65,7 @@ public class WaitForConfirmSend {
             channel.basicPublish(exchangeName, "directKey", null,
                     message.getBytes(StandardCharsets.UTF_8));
             try {
-                boolean b = channel.waitForConfirms(1000l);
-                if (!b) {
-                    System.out.println("补发消息");
-                }
+                channel.waitForConfirmsOrDie(1000l);
             } catch (InterruptedException e) {
                 System.out.println("不能确定消息是否发送成功,需要补发消息,但是可能造成重复消息,需要在消费者代码中实现操作的幂等性");
             } catch (TimeoutException e) {

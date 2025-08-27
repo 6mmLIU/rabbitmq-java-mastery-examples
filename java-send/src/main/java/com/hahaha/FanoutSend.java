@@ -1,4 +1,4 @@
-package com.example;
+package com.hahaha;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class DirectSend {
+public class FanoutSend {
     public static void main(String[] args) {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("192.168.171.130");
@@ -25,7 +25,7 @@ public class DirectSend {
             //在物理链接中创建虚拟信道
             channel = connection.createChannel();
 
-            String queueName = "directQueue";
+            String queueName = "fanoutQueue";
             /**
              * 定义队列,如果队列不存在创建,存在就直接调用
              * 参数1:队列名
@@ -36,14 +36,14 @@ public class DirectSend {
              */
             channel.queueDeclare(queueName, true, false, false, null);
 
-            String exchangeName = "directExchange";
+            String exchangeName = "fanoutExchange";
             /**
              * 交换机
              * 参数1:交换机名字
              * 参数2:交换机类型(direct topic fanout)
              * 参数3:是否持久化
              */
-            channel.exchangeDeclare(exchangeName, "direct", true);
+            channel.exchangeDeclare(exchangeName, "fanout", true);
 
             /**
              * 绑定队列
@@ -51,9 +51,9 @@ public class DirectSend {
              * 参数2: 交换机名
              * 参数3: 路由键
              */
-            channel.queueBind(queueName, exchangeName, "directKey");
+            channel.queueBind(queueName, exchangeName, "fanout");
 
-            String message = "hello direct exchange 消息002";
+            String message = "hello fanout exchange 消息002";
             /**
              * 发送消息
              * 参数1: 交换机名字
@@ -61,7 +61,7 @@ public class DirectSend {
              * 参数3: 属性,null即可
              * 参数4: 消息内容
              */
-            channel.basicPublish(exchangeName, "directKey", null,
+            channel.basicPublish(exchangeName, "fanoutKey", null,
                     message.getBytes(StandardCharsets.UTF_8));
 
             System.out.println("消息已发送：" + message);

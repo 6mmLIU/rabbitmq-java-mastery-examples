@@ -1,4 +1,4 @@
-package com.example;
+package com.hahaha;
 
 import com.rabbitmq.client.*;
 
